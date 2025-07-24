@@ -64,17 +64,16 @@ app.get('/health', (req, res) => {
 // app.use(express.static(path.join(__dirname, 'dist'))); // Disabled for Render deployment
 
 // SPA fallback: serve index.html for non-API, non-upload, non-health routes
-// Disabled SPA fallback for Render deployment
-// app.get('*', (req, res, next) => {
-//   if (
-//     req.originalUrl.startsWith('/api') ||
-//     req.originalUrl.startsWith('/uploads') ||
-//     req.originalUrl.startsWith('/health')
-//   ) {
-//     return next();
-//   }
-//   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-// });
+app.get('*', (req, res, next) => {
+  if (
+    req.originalUrl.startsWith('/api') ||
+    req.originalUrl.startsWith('/uploads') ||
+    req.originalUrl.startsWith('/health')
+  ) {
+    return next();
+  }
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
 
 // 404 handler for undefined API routes
 app.use('*', (req, res) => {
