@@ -2,13 +2,13 @@ const mongoose = require('mongoose');
 
 const planSchema = new mongoose.Schema({
   name: {
-  name: {
     type: String,
     required: true,
     unique: true,
     trim: true,
     maxlength: 100
   },
+  monthlyPrice: {
     type: Number,
     required: true,
     min: 0,
@@ -91,7 +91,7 @@ planSchema.set('toJSON', { virtuals: true });
 planSchema.set('toObject', { virtuals: true });
 
 // Index for faster queries
-// Removed to avoid duplicate index warning, unique: true already creates an index
+planSchema.index({ name: 1 });
 planSchema.index({ isActive: 1 });
 planSchema.index({ monthlyPrice: 1 });
 planSchema.index({ createdAt: -1 });

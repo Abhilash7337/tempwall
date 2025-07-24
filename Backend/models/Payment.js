@@ -51,7 +51,7 @@ const paymentSchema = new mongoose.Schema({
 
 // Index for efficient queries
 paymentSchema.index({ userId: 1, status: 1 });
-// Removed to avoid duplicate index warning, unique: true already creates an index
+paymentSchema.index({ transactionId: 1 });
 paymentSchema.index({ paymentDate: -1 });
 
 const Payment = mongoose.model('Payment', paymentSchema);
