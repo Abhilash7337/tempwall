@@ -201,7 +201,15 @@ const updateSubscription = async (req, res) => {
     }
 
     // Update fields
-    if (plan) subscription.plan = plan;
+    if (plan) {
+      subscription.plan = plan;
+      // Fetch plan price and set subscription price
+      const Plan = require('../models/Plan');
+      const planDoc = await Plan.findOne({ name: plan });
+      if (planDoc) {
+        subscription.price = planDoc.monthlyPrice || 0;
+      }
+    }
     if (status) subscription.status = status;
     if (endDate) subscription.endDate = new Date(endDate);
     if (typeof autoRenew === 'boolean') subscription.autoRenew = autoRenew;
