@@ -91,7 +91,7 @@ planSchema.set('toJSON', { virtuals: true });
 planSchema.set('toObject', { virtuals: true });
 
 // Index for faster queries
-planSchema.index({ name: 1 });
+// Removed to avoid duplicate index warning, unique: true already creates an index
 planSchema.index({ isActive: 1 });
 planSchema.index({ monthlyPrice: 1 });
 planSchema.index({ createdAt: -1 });

@@ -8,11 +8,6 @@ const subscriptionSchema = new mongoose.Schema({
     unique: true,
     index: true
   },
-  plan: {
-    type: String,
-    required: true,
-    default: 'free'
-  },
   status: {
     type: String,
     required: true,
@@ -20,12 +15,11 @@ const subscriptionSchema = new mongoose.Schema({
     default: 'active',
     index: true
   },
-  billingCycle: {
+  plan: {
     type: String,
-    enum: ['monthly', 'quarterly', 'yearly', 'lifetime'],
-    default: 'monthly'
+    required: true
   },
-  amount: {
+  price: {
     type: Number,
     required: true,
     min: 0

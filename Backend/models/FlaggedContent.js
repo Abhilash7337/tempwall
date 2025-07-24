@@ -5,7 +5,6 @@ const flaggedContentSchema = new mongoose.Schema({
     type: String,
     required: true,
     enum: ['draft', 'user', 'shared_draft'],
-    index: true
   },
   contentId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -44,13 +43,11 @@ const flaggedContentSchema = new mongoose.Schema({
     type: String,
     enum: ['pending', 'reviewed', 'approved', 'rejected', 'resolved'],
     default: 'pending',
-    index: true
   },
   priority: {
     type: String,
     enum: ['low', 'medium', 'high', 'critical'],
     default: 'medium',
-    index: true
   },
   adminNotes: {
     type: String,
