@@ -29,7 +29,8 @@ const DecorManagement = () => {
     try {
       setCategoryLoading(true);
       setCategoryError('');
-      const response = await authFetch('/categories');
+      const apiBase = import.meta.env.VITE_API_BASE_URL;
+      const response = await authFetch(`${apiBase}/categories`);
       const data = await response.json();
       if (response.ok) {
         setCategories(data);
@@ -50,7 +51,8 @@ const DecorManagement = () => {
   const fetchDecors = async () => {
     try {
       setLoading(true);
-      const response = await authFetch('/decors');
+      const apiBase = import.meta.env.VITE_API_BASE_URL;
+      const response = await authFetch(`${apiBase}/decors`);
       const data = await response.json();
       
       if (response.ok) {
@@ -93,9 +95,10 @@ const DecorManagement = () => {
         console.log('❌ No image in form data!');
       }
 
+      const apiBase = import.meta.env.VITE_API_BASE_URL;
       const url = editingDecor 
-        ? `/admin/decors/${editingDecor._id}` 
-        : '/admin/decors';
+        ? `${apiBase}/admin/decors/${editingDecor._id}` 
+        : `${apiBase}/admin/decors`;
       const method = editingDecor ? 'PUT' : 'POST';
       
       console.log('🎯 Making request to:', url, 'with method:', method);
@@ -135,7 +138,8 @@ const DecorManagement = () => {
     }
 
     try {
-      const response = await authFetch(`/admin/decors/${decorId}`, {
+      const apiBase = import.meta.env.VITE_API_BASE_URL;
+      const response = await authFetch(`${apiBase}/admin/decors/${decorId}`, {
         method: 'DELETE'
       });
 
@@ -237,7 +241,7 @@ const DecorManagement = () => {
           <div key={decor._id} className="bg-white rounded-lg shadow-md overflow-hidden">
             <div className="h-48 bg-gray-100 flex items-center justify-center">
               <img
-                src={`http://localhost:5001${decor.imageUrl}`}
+                src={`${import.meta.env.VITE_API_BASE_URL}${decor.imageUrl}`}
                 alt={decor.name}
                 className="max-h-full max-w-full object-contain"
               />

@@ -45,7 +45,8 @@ const PlanManagement = () => {
 
   const fetchAllDecors = async () => {
     try {
-      const response = await authFetch('/decors');
+      const apiBase = import.meta.env.VITE_API_BASE_URL;
+      const response = await authFetch(`${apiBase}/decors`);
       const data = await response.json();
       if (response.ok) {
         setAllDecors(data);
@@ -59,7 +60,8 @@ const PlanManagement = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await authFetch('/categories');
+      const apiBase = import.meta.env.VITE_API_BASE_URL;
+      const response = await authFetch(`${apiBase}/categories`);
       const data = await response.json();
       if (response.ok) {
         setCategories(data);
@@ -75,28 +77,24 @@ const PlanManagement = () => {
     try {
       setLoading(true);
       setError('');
-      console.log('Fetching plans from:', 'http://localhost:5001/admin/plans');
-      
+      const apiBase = import.meta.env.VITE_API_BASE_URL;
+      console.log('Fetching plans from:', `${apiBase}/admin/plans`);
       // Try admin endpoint first
-      let response = await authFetch('http://localhost:5001/admin/plans');
+      let response = await authFetch(`${apiBase}/admin/plans`);
       console.log('Admin response status:', response.status);
-      
       // If admin endpoint fails due to auth, try public endpoint for testing
       if (!response.ok) {
         console.log('Admin endpoint failed, trying public endpoint...');
-        response = await fetch('http://localhost:5001/plans');
+        response = await fetch(`${apiBase}/plans`);
         console.log('Public response status:', response.status);
       }
-      
       if (!response.ok) {
         const errorText = await response.text();
         console.log('Error response:', errorText);
         throw new Error(`Failed to fetch plans: ${response.status} ${errorText}`);
       }
-      
       const data = await response.json();
       console.log('Plans data received:', data);
-      
       // Handle different response formats (admin vs public)
       if (data.plans) {
         setPlans(data.plans);
@@ -139,12 +137,11 @@ const PlanManagement = () => {
       delete submitData.booleanFeatures;
       delete submitData.customFeatures;
 
+      const apiBase = import.meta.env.VITE_API_BASE_URL;
       const url = editingPlan 
-        ? `http://localhost:5001/admin/plans/${editingPlan._id}`
-        : 'http://localhost:5001/admin/plans';
-      
+        ? `${apiBase}/admin/plans/${editingPlan._id}`
+        : `${apiBase}/admin/plans`;
       const method = editingPlan ? 'PUT' : 'POST';
-      
       const response = await authFetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
@@ -171,7 +168,8 @@ const PlanManagement = () => {
     if (!planToDelete) return;
 
     try {
-      const response = await authFetch(`http://localhost:5001/admin/plans/${planToDelete}`, {
+      const apiBase = import.meta.env.VITE_API_BASE_URL;
+      const response = await authFetch(`${apiBase}/admin/plans/${planToDelete}`, {
         method: 'DELETE'
       });
 
@@ -551,7 +549,7 @@ const PlanManagement = () => {
                                 }}
                               />
                               <img
-                                src={decor.imageUrl ? `http://localhost:5001${decor.imageUrl}` : ''}
+                                src={decor.imageUrl ? `${decor.imageUrl}` : ''}
                                 alt={decor.name}
                                 className="w-8 h-8 object-contain rounded border border-gray-200 bg-gray-100"
                                 style={{ minWidth: 32, minHeight: 32 }}
@@ -592,7 +590,7 @@ const PlanManagement = () => {
                                   }}
                                 />
                                 <img
-                                  src={decor.imageUrl ? `http://localhost:5001${decor.imageUrl}` : ''}
+                                  src={decor.imageUrl ? `${import.meta.env.VITE_API_BASE_URL}${decor.imageUrl}` : ''}
                                   alt={decor.name}
                                   className="w-8 h-8 object-contain rounded border border-gray-200 bg-gray-100"
                                   style={{ minWidth: 32, minHeight: 32 }}

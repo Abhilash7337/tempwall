@@ -146,7 +146,8 @@ const UserProfileForm = ({ user, onProfileUpdate }) => {
         profilePhoto: submitData.profilePhoto ? '[Base64 Image Data]' : submitData.profilePhoto
       });
 
-      const response = await fetch(`http://localhost:5001/user/profile`, {
+      const apiBase = import.meta.env.VITE_API_BASE_URL;
+      const response = await fetch(`${apiBase}/user/profile`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

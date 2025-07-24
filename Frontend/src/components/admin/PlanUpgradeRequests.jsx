@@ -17,7 +17,8 @@ const PlanUpgradeRequests = () => {
     setLoading(true);
     setError('');
     try {
-      const res = await authFetch('/admin/plan-upgrade-requests');
+      const apiBase = import.meta.env.VITE_API_BASE_URL;
+      const res = await authFetch(`${apiBase}/admin/plan-upgrade-requests`);
       const data = await res.json();
       if (res.ok && data.success) {
         setRequests(data.requests);
@@ -38,7 +39,8 @@ const PlanUpgradeRequests = () => {
   const handleAction = async (id, action) => {
     setActionLoading((prev) => ({ ...prev, [id]: true }));
     try {
-      const res = await authFetch(`/admin/plan-upgrade-requests/${id}/${action}`, { method: 'POST' });
+      const apiBase = import.meta.env.VITE_API_BASE_URL;
+      const res = await authFetch(`${apiBase}/admin/plan-upgrade-requests/${id}/${action}`, { method: 'POST' });
       const data = await res.json();
       if (res.ok && data.success) {
         fetchRequests();
@@ -69,7 +71,8 @@ const PlanUpgradeRequests = () => {
     if (!window.confirm('Are you sure you want to delete this request?')) return;
     setActionLoading((prev) => ({ ...prev, [id]: true }));
     try {
-      const res = await authFetch(`/admin/plan-upgrade-requests/${id}`, { method: 'DELETE' });
+      const apiBase = import.meta.env.VITE_API_BASE_URL;
+      const res = await authFetch(`${apiBase}/admin/plan-upgrade-requests/${id}`, { method: 'DELETE' });
       const data = await res.json();
       if (res.ok && data.success) {
         fetchRequests();

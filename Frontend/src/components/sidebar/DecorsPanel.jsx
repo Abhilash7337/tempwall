@@ -14,7 +14,8 @@ const DecorsPanel = ({ onAddDecor, userDecors = [], onRemoveUserDecor, onSelectU
   const fetchDecors = async () => {
     try {
       setLoading(true);
-      const response = await authFetch('/decors');
+      const apiBase = import.meta.env.VITE_API_BASE_URL;
+      const response = await authFetch(`${apiBase}/decors`);
       const data = await response.json();
       if (response.ok) {
         // Transform API data to match the component's expected format
@@ -38,7 +39,7 @@ const DecorsPanel = ({ onAddDecor, userDecors = [], onRemoveUserDecor, onSelectU
           return {
             id: decor._id,
             name: decor.name,
-            src: `http://localhost:5001${decor.imageUrl}`,
+            src: `${import.meta.env.VITE_API_BASE_URL}${decor.imageUrl}`,
             category: decor.category,
             description: decor.description,
             size: size

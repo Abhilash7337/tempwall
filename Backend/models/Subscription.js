@@ -5,15 +5,14 @@ const subscriptionSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
-    unique: true,
-    index: true
+    unique: true
   },
   status: {
     type: String,
     required: true,
     enum: ['active', 'inactive', 'suspended', 'cancelled', 'expired', 'trial'],
     default: 'active',
-    index: true
+    // index removed, defined below
   },
   plan: {
     type: String,
@@ -102,8 +101,8 @@ const subscriptionSchema = new mongoose.Schema({
 });
 
 // Indexes for performance
-subscriptionSchema.index({ userId: 1 });
-subscriptionSchema.index({ status: 1, plan: 1 });
+// Index for userId is already defined as unique above
+// Index for status is defined below, not needed in schema
 subscriptionSchema.index({ endDate: 1 });
 subscriptionSchema.index({ nextBillingDate: 1 });
 
