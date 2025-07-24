@@ -52,8 +52,8 @@ export const logout = () => {
 // Create authenticated fetch function
 export const authFetch = async (url, options = {}) => {
     const token = getToken();
-    // Add base URL for backend API
-    const baseURL = 'http://localhost:5001';
+    // Use VITE_API_BASE_URL for backend API
+    const baseURL = import.meta.env.VITE_API_BASE_URL;
     const fullURL = url.startsWith('http') ? url : `${baseURL}${url}`;
     
     if (token) {
