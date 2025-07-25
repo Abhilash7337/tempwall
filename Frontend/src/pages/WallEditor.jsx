@@ -454,7 +454,7 @@ function WallEditor() {
             opacity: 0,
             overflow: 'hidden'
           }}
-          onChange={handleWallImageChange}
+          onChange={e => handleWallImageChange(e, draftId)}
         />
         <input
           ref={imagesInputRef}
@@ -469,7 +469,7 @@ function WallEditor() {
             opacity: 0,
             overflow: 'hidden'
           }}
-          onChange={handleImageChange}
+          onChange={e => handleImageChange(e, draftId)}
         />
         
         {/* Enhanced Background Animation Layer (modular) */}
