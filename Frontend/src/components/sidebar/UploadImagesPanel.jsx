@@ -108,7 +108,7 @@ const UploadImagesPanel = ({
               style={{ animationDelay: `${idx * 0.1}s` }}
             >
               <img 
-                src={src} 
+                src={src && src.includes('localhost') ? src.replace('http://localhost:5001', import.meta.env.VITE_API_BASE_URL) : src} 
                 alt={`preview ${idx + 1}`} 
                 className="w-full h-24 object-cover transition-transform duration-300 group-hover:scale-110" 
               />

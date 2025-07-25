@@ -15,6 +15,11 @@ const WallCanvas = ({
   setImageStates,
   isViewOnly = false
 }) => {
+  // Fix backend returning localhost URLs in production for wallImage
+  let fixedWallImage = wallImage;
+  if (fixedWallImage && fixedWallImage.includes('localhost')) {
+    fixedWallImage = fixedWallImage.replace('http://localhost:5001', import.meta.env.VITE_API_BASE_URL);
+  }
   return (
     <main 
       className="canvas-area min-h-screen flex items-center justify-center relative overflow-hidden" 
@@ -88,7 +93,7 @@ const WallCanvas = ({
           backgroundColor: wallColor,
           width: wallWidth,
           height: wallHeight,
-          backgroundImage: wallImage ? `url(${wallImage})` : undefined,
+          backgroundImage: fixedWallImage ? `url(${fixedWallImage})` : undefined,
           position: 'relative',
           flexShrink: 0,
           boxShadow: `

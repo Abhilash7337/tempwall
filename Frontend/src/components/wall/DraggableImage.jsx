@@ -22,6 +22,12 @@ function DraggableImage({
     console.log(`🖼️ DraggableImage ${idx}: src="${src}", loading=${imageLoading}, error=${imageLoadError}`);
   }, [src, imageLoading, imageLoadError, idx]);
 
+  // Fix backend returning localhost URLs in production
+  let fixedSrc = src;
+  if (fixedSrc && fixedSrc.includes('localhost')) {
+    fixedSrc = fixedSrc.replace('http://localhost:5001', import.meta.env.VITE_API_BASE_URL);
+  }
+
   const updateImageState = (updates) => {
     setImageStates(prevStates => {
       const newStates = [...prevStates];
@@ -186,7 +192,7 @@ function DraggableImage({
       {Object.keys(wrapperStyle).length > 0 ? (
         <div style={wrapperStyle}>
           <img
-            src={src}
+            src={fixedSrc}
             alt=""
             style={{
               width: '100%',
@@ -202,7 +208,7 @@ function DraggableImage({
       ) : (
         <div className="relative">
           <img
-            src={src}
+            src={fixedSrc}
             alt=""
             style={{
               width: '100%',

@@ -85,7 +85,12 @@ export default function useWallData() {
         });
         if (!response.ok) throw new Error('Failed to upload image');
         const data = await response.json();
-        setWallImage(data.url);
+        // Fix backend returning localhost URLs in production
+        let url = data.url;
+        if (url && url.includes('localhost')) {
+          url = url.replace('http://localhost:5001', import.meta.env.VITE_API_BASE_URL);
+        }
+        setWallImage(url);
       } catch (error) {
         setErrorMsg('Failed to upload the image. Please try again.');
       }
@@ -226,7 +231,12 @@ export default function useWallData() {
         });
         if (!response.ok) throw new Error('Failed to upload image');
         const data = await response.json();
-        uploadedUrls.push(data.url);
+        // Fix backend returning localhost URLs in production
+        let url = data.url;
+        if (url && url.includes('localhost')) {
+          url = url.replace('http://localhost:5001', import.meta.env.VITE_API_BASE_URL);
+        }
+        uploadedUrls.push(url);
       }
       setImages(prev => [...prev, ...uploadedUrls]);
       setImageStates(prev => [
