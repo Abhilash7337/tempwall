@@ -13,8 +13,8 @@ export default function useDraftLoader({ draftId, isCollaborating, searchParams,
         const isShared = sharedParam === 'true';
         const token = searchParams.get('token');
         const endpoint = isShared
-          ? `http://localhost:5001/drafts/shared/${draftId}${token ? `?token=${token}` : ''}`
-          : `http://localhost:5001/drafts/single/${draftId}`;
+          ? `${import.meta.env.VITE_API_BASE_URL}/drafts/shared/${draftId}${token ? `?token=${token}` : ''}`
+          : `${import.meta.env.VITE_API_BASE_URL}/drafts/single/${draftId}`;
         const response = isShared
           ? await fetch(endpoint)
           : await authFetch(endpoint);
@@ -24,7 +24,10 @@ export default function useDraftLoader({ draftId, isCollaborating, searchParams,
         const { wallData } = draft;
         if (wallData) setWallData(wallData);
         if (isCollaborating) {
-          const ws = new window.WebSocket(`ws://localhost:5001/drafts/${draftId}/collaborate`);
+          // Use wss if VITE_API_BASE_URL is https, else ws
+          const wsProtocol = import.meta.env.VITE_API_BASE_URL.startsWith('https') ? 'wss' : 'ws';
+          const wsBase = import.meta.env.VITE_API_BASE_URL.replace(/^https?:\/\//, '');
+          const ws = new window.WebSocket(`${wsProtocol}://${wsBase}/drafts/${draftId}/collaborate`);
           ws.onmessage = (event) => {
             const update = JSON.parse(event.data);
             if (update.type === 'wall_update') {
