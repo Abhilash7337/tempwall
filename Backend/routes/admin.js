@@ -65,6 +65,7 @@ router.post('/plan-upgrade-requests/:id/approve', verifyToken, checkAdmin, async
         plan: request.requestedPlan,
         billingCycle: 'monthly',
         amount: planPrice,
+        price: planPrice, // Ensure required field is set
         startDate: new Date(),
         endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
         autoRenew: false
@@ -72,6 +73,7 @@ router.post('/plan-upgrade-requests/:id/approve', verifyToken, checkAdmin, async
     } else {
       subscription.plan = request.requestedPlan;
       subscription.amount = planPrice;
+      subscription.price = planPrice; // Ensure required field is set
       subscription.status = 'active';
       subscription.startDate = new Date();
     }

@@ -31,12 +31,11 @@ const planSchema = new mongoose.Schema({
   limits: {
     designsPerMonth: {
       type: Number,
-      default: -1 // -1 means unlimited
+    
     },
     imageUploadsPerDesign: {
       type: Number,
-      default: 3, // Default limit for image uploads per design
-      min: -1 // -1 means unlimited
+     
     }
   },
 
