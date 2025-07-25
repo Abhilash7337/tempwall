@@ -20,6 +20,14 @@ const WallCanvas = ({
   if (fixedWallImage && fixedWallImage.includes('localhost')) {
     fixedWallImage = fixedWallImage.replace('http://localhost:5001', import.meta.env.VITE_API_BASE_URL);
   }
+
+  // Debug logging for wallImage and images
+  React.useEffect(() => {
+    console.log('[WallCanvas] wallImage:', wallImage);
+    console.log('[WallCanvas] fixedWallImage:', fixedWallImage);
+    console.log('[WallCanvas] images:', images);
+    console.log('[WallCanvas] imageStates:', imageStates);
+  }, [wallImage, fixedWallImage, images, imageStates]);
   return (
     <main 
       className="canvas-area min-h-screen flex items-center justify-center relative overflow-hidden" 
