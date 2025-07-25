@@ -73,16 +73,32 @@ export default function useWallData() {
   }, []);
 
   // Handlers
-  const handleWallImageChange = async (e) => {
+  // Accepts (e, draftId) or (e, { draftId }) for flexibility
+  const handleWallImageChange = async (e, draftIdArg) => {
     const file = e.target.files[0];
+    // Support both (e, draftId) and (e, { draftId })
+    let draftId = draftIdArg;
+    if (draftIdArg && typeof draftIdArg === 'object' && draftIdArg.draftId) {
+      draftId = draftIdArg.draftId;
+    }
+    if (!draftId) {
+      setErrorMsg('No draft selected. Please save or select a draft before uploading a background image.');
+      return;
+    }
     if (file) {
       try {
         const formData = new FormData();
         formData.append('image', file);
+        formData.append('draftId', draftId);
         const response = await authFetch(`${import.meta.env.VITE_API_BASE_URL}/upload`, {
           method: 'POST',
           body: formData,
         });
+        if (response.status === 403) {
+          const err = await response.json();
+          setErrorMsg(err.message || 'Image upload limit reached for your plan.');
+          return;
+        }
         if (!response.ok) throw new Error('Failed to upload image');
         const data = await response.json();
         // Fix backend returning localhost URLs in production
@@ -92,7 +108,7 @@ export default function useWallData() {
         }
         setWallImage(url);
       } catch (error) {
-        setErrorMsg('Failed to upload the image. Please try again.');
+        setErrorMsg(error?.message || 'Failed to upload the image. Please try again.');
       }
     }
   };
@@ -217,18 +233,34 @@ export default function useWallData() {
   };
 
   // Handler for uploading user images (not wall background)
-  const handleImageChange = async (e) => {
+  // Accepts (e, draftId) or (e, { draftId }) for flexibility
+  const handleImageChange = async (e, draftIdArg) => {
     const files = Array.from(e.target.files);
     if (!files.length) return;
+    // Support both (e, draftId) and (e, { draftId })
+    let draftId = draftIdArg;
+    if (draftIdArg && typeof draftIdArg === 'object' && draftIdArg.draftId) {
+      draftId = draftIdArg.draftId;
+    }
+    if (!draftId) {
+      setErrorMsg('No draft selected. Please save or select a draft before uploading images.');
+      return;
+    }
     try {
       const uploadedUrls = [];
       for (const file of files) {
         const formData = new FormData();
         formData.append('image', file);
+        formData.append('draftId', draftId);
         const response = await authFetch(`${import.meta.env.VITE_API_BASE_URL}/upload`, {
           method: 'POST',
           body: formData,
         });
+        if (response.status === 403) {
+          const err = await response.json();
+          setErrorMsg(err.message || 'Image upload limit reached for your plan.');
+          return;
+        }
         if (!response.ok) throw new Error('Failed to upload image');
         const data = await response.json();
         // Fix backend returning localhost URLs in production
@@ -253,7 +285,7 @@ export default function useWallData() {
         }))
       ]);
     } catch (error) {
-      setErrorMsg('Failed to upload one or more images. Please try again.');
+      setErrorMsg(error?.message || 'Failed to upload one or more images. Please try again.');
     }
   };
 
